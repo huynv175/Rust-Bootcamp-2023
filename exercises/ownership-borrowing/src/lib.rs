@@ -86,13 +86,14 @@ fn exercise5() {
 use std::io;
 
 fn exercise6() {
-      let mut prev_key: String = String::new();
+    
 
     for line in io::stdin().lines() {
-        let s = line.unwrap().to_string();
-         let data: Vec<String> = s.split("\t").map(|x| x.to_string()).collect();
+        let s = line.unwrap();
+        let mut prev_key: &str = "";
+        let data: Vec<&str> = s.split("\t").collect();
         if prev_key.len() == 0 {
-            prev_key = data[0].clone();
+            prev_key = data[0];
         }
     }
 }
