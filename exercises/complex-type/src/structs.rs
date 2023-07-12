@@ -2,6 +2,7 @@
 // Fix the error
 // Make it compile
 // Run test
+#[derive(Debug)]
 struct Person {
     name: String,
     age: u8,
@@ -17,6 +18,16 @@ fn exercise1() -> Person {
     };
 
     p
+}
+
+impl PartialEq for Person {
+    fn eq(&self, other: &Self) -> bool {
+       if self.age == other.age && self.name == other.name && self.hobby == other.hobby {
+            true
+        } else {
+            false
+        }
+    }
 }
 
 // Exercise 2
@@ -38,13 +49,13 @@ impl Agent {
     }
 
     // Get the name of the person
-    fn get_name(&self) -> &str {
-        todo!()
+    fn get_name(&self) -> String {
+        self.name.clone()
     }
 
     // Get the age of the person
     fn get_age(&self) -> u32 {
-        todo!()
+        self.age
     }
 }
 
@@ -61,18 +72,18 @@ impl Calculator {
         Calculator { value: 0 }
     }
 
-    fn add(&self, num: i32) {
+    fn add(&mut self, num: i32) {
         self.value += num;
     }
 
-    fn subtract(mut self, num: i32) {
+    fn subtract(&mut self, num: i32) {
         self.value -= num;
     }
-    fn clear(self) {
+    fn clear(&mut self) {
         self.value = 0;
     }
 
-    fn get_value(self) -> i32 {
+    fn get_value(&self) -> i32 {
         self.value
     }
 }
@@ -95,7 +106,8 @@ fn exercise4() {
 
     let u2 = User {
         first: String::from("Mary"),
-        ..u1
+        last: u1.last.to_owned(),
+        age: u1.age,
         
     };
 
@@ -110,6 +122,16 @@ struct Foo {
     int_val: i32,
 }
 
+impl Foo {
+    fn clone(&self) -> Foo {
+        Foo{str_val: self.str_val.clone(), int_val: self.int_val.clone()}
+    }
+
+    fn get_str_val(&self) -> String {
+        self.str_val.clone()
+    }
+}
+
 fn exercise5() {
     let mut foos = Vec::new();
     foos.push(Foo {
@@ -122,12 +144,11 @@ fn exercise5() {
     });
 
     
-    let moved = foos[0];
+    let moved = foos[0].clone();
 
     
-    let moved_field = foos[0].str_val;
+    let moved_field = foos[0].get_str_val();
 }
-
 // Exercise 6
 // Structs contain data, but can also have logic. In this exercise we have
 // defined the Package struct and we want to test some logic attached to it.
@@ -153,12 +174,13 @@ impl Package {
         }
     }
 
-    fn is_international(&self) -> ??? {
-        // Something goes here...
+    fn is_international(&self) -> bool {
+       self.sender_country != self.recipient_country
     }
 
-    fn get_fees(&self, cents_per_gram: i32) -> ??? {
+    fn get_fees(&self, cents_per_gram: i32) -> i32 {
         // Something goes here...
+        cents_per_gram * self.weight_in_grams
     }
 }
 
